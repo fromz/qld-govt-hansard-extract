@@ -1,7 +1,7 @@
-from .bbox import BBoxFactoryMixin
+from .bbox import BBoxMixin
 
 
-class Text(BBoxFactoryMixin, object):
+class Text(BBoxMixin, object):
     """A class containing information from a <text> node"""
     attr = {}
 
