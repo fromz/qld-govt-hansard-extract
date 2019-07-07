@@ -1,21 +1,25 @@
-from .bbox import BBoxMixin
+from .bbox import bbox_from_string, InvalidBboxString
 
 
-class Text(BBoxMixin, object):
+class Text(object):
     """A class containing information from a <text> node"""
-    def __init__(self):
-        self.attr = {}
-        self.contents = ''
+    def __init__(self, attr, contents):
+        self.attr = attr
+        self.contents = contents
+        if 'bbox' in attr:
+            try:
+                self.bbox = bbox_from_string(attr['bbox'])
+            except InvalidBboxString:
+                self.bbox = None
+        else:
+            self.bbox = None
 
     def is_blank_node(self):
         return self.contents.strip() == ''
 
 
 def get_text_from_xml_element(xml_element):
-    t = Text()
-    t.attr = xml_element.attrib
-    t.contents = xml_element.text
-    return t
+    return Text(xml_element.attrib, xml_element.text)
 
 
 def text_attrs_styles_are_equal(attr1, attr2):

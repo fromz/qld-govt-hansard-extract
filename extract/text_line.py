@@ -19,26 +19,19 @@ class TextLine(object):
     """ compacts text nodes by their style attributes, merging their bboxes """
     def compact_texts(self):
         merged_texts = []
-        ctext = Text()
+        ctext = Text({}, '')
         bboxes = []
         for text in self:
             if text_attrs_styles_are_equal(copy.copy(ctext.attr), copy.copy(text.attr)) is False:
                 # New style of text, finish up last iteration
                 # Make new bbox
                 if len(bboxes) > 0:
-                    bbox = bbox_merge(bboxes)
-                    ctext.attr['bbox'] = "{},{},{},{}".format(
-                        bbox.upper_left_coordinate.x,
-                        bbox.upper_left_coordinate.y,
-                        bbox.lower_right_coordinate.x,
-                        bbox.lower_right_coordinate.y
-                    )
+                    ctext.bbox = bbox_merge(bboxes)
 
                 bboxes = [] # reset bboxes
 
                 merged_texts.append(ctext)
-                ctext = Text() # reset ctext
-                ctext.attr = text.attr # Set the ctext attributes to be the current text node (copying styles etc)
+                ctext = Text(text.attr, '') # reset ctext
 
             # Not all text nodes have a bounding box
             if text.bbox:

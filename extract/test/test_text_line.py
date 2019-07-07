@@ -30,9 +30,6 @@ class TestGetTextLineFromXmlElement(unittest.TestCase):
     def test_correct_number_of_texts(self):
         self.assertEqual(len(self.text_line.texts), 16)
 
-    # def test_retains_bbox(self):
-    #     assert len(self.text_line.bbox) == 16
-
 
 class TestTextLineCompactTexts(unittest.TestCase):
     def setUp(self):
@@ -69,34 +66,62 @@ class TestTextLineCompactTexts(unittest.TestCase):
     def test_text_nodes_fonts_are_retained(self):
         for nodes_expected_values in self.expected_values:
             text_node = self.compacted_text_line.texts[nodes_expected_values['node']]
-            self.assertEqual(text_node.attr['font'], nodes_expected_values['font'])
+            self.assertEqual(
+                text_node.attr['font'],
+                nodes_expected_values['font'],
+                "Node {}".format(nodes_expected_values['node'])
+            )
 
     def test_text_nodes_font_sizes_are_retained(self):
         for nodes_expected_values in self.expected_values:
             text_node = self.compacted_text_line.texts[nodes_expected_values['node']]
-            self.assertEqual(text_node.attr['size'], nodes_expected_values['size'])
+            self.assertEqual(
+                text_node.attr['size'],
+                nodes_expected_values['size'],
+                "Node {}".format(nodes_expected_values['node'])
+            )
 
     def test_text_nodes_contents_are_merged(self):
         for nodes_expected_values in self.expected_values:
             text_node = self.compacted_text_line.texts[nodes_expected_values['node']]
-            self.assertEqual(text_node.contents, nodes_expected_values['contents'])
+            self.assertEqual(
+                text_node.contents,
+                nodes_expected_values['contents'],
+                "Node {}".format(nodes_expected_values['node'])
+            )
 
     def test_text_nodes_bboxes_are_merged_upper_left_x(self):
         for nodes_expected_values in self.expected_values:
             text_node = self.compacted_text_line.texts[nodes_expected_values['node']]
-            self.assertEqual(text_node.bbox.upper_left_coordinate.x, nodes_expected_values['upper_left_coordinate_x'])
+            self.assertEqual(
+                text_node.bbox.upper_left_coordinate.x,
+                nodes_expected_values['upper_left_coordinate_x'],
+                "Node {}".format(nodes_expected_values['node'])
+            )
 
     def test_text_nodes_bboxes_are_merged_upper_left_y(self):
         for nodes_expected_values in self.expected_values:
             text_node = self.compacted_text_line.texts[nodes_expected_values['node']]
-            self.assertEqual(text_node.bbox.upper_left_coordinate.y, nodes_expected_values['upper_left_coordinate_y'])
+            self.assertEqual(
+                text_node.bbox.upper_left_coordinate.y,
+                nodes_expected_values['upper_left_coordinate_y'],
+                "Node {}".format(nodes_expected_values['node'])
+            )
 
     def test_text_nodes_bboxes_are_merged_lower_right_x(self):
         for nodes_expected_values in self.expected_values:
             text_node = self.compacted_text_line.texts[nodes_expected_values['node']]
-            self.assertEqual(text_node.bbox.lower_right_coordinate.x, nodes_expected_values['lower_right_coordinate_x'])
+            self.assertEqual(
+                text_node.bbox.lower_right_coordinate.x,
+                nodes_expected_values['lower_right_coordinate_x'],
+                "Node {}".format(nodes_expected_values['node'])
+            )
 
     def test_text_nodes_bboxes_are_merged_lower_right_y(self):
         for nodes_expected_values in self.expected_values:
             text_node = self.compacted_text_line.texts[nodes_expected_values['node']]
-            self.assertEqual(text_node.bbox.lower_right_coordinate.y, nodes_expected_values['lower_right_coordinate_y'])
+            self.assertEqual(
+                text_node.bbox.lower_right_coordinate.y,
+                nodes_expected_values['lower_right_coordinate_y'],
+                "Node {}".format(nodes_expected_values['node'])
+            )
