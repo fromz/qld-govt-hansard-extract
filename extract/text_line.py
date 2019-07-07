@@ -1,15 +1,16 @@
 from .text import Text, get_text_from_xml_element, text_attrs_styles_are_equal
 from .bbox_merge import bbox_merge
 from .bbox import bbox_from_node_attrs
+from .positioned_node import PositionedNode
 import copy
 
 
-class TextLine(object):
+class TextLine(PositionedNode):
     """A class containing information from a <textline> node"""
 
     def __init__(self, bbox):
+        super().__init__(bbox)
         self.texts = []
-        self.bbox = bbox
 
     def __iter__(self):
         return iter(self.texts)

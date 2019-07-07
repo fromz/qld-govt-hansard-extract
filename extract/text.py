@@ -1,13 +1,14 @@
 from .bbox import bbox_from_node_attrs
+from .positioned_node import PositionedNode
 import copy
 
 
-class Text(object):
+class Text(PositionedNode):
     """A class containing information from a <text> node"""
     def __init__(self, attr, contents):
+        super().__init__(bbox_from_node_attrs(attr))
         self.attr = attr
         self.contents = contents
-        self.bbox = bbox_from_node_attrs(attr)
 
     def is_blank_node(self):
         return self.contents.strip() == ''
