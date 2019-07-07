@@ -22,7 +22,7 @@ class TextLine(object):
         ctext = Text({}, '')
         bboxes = []
         for text in self:
-            if text_attrs_styles_are_equal(copy.copy(ctext.attr), copy.copy(text.attr)) is False:
+            if text_attrs_styles_are_equal(ctext.attr, text.attr) is False:
                 # New style of text, finish up last iteration
                 # Make new bbox
                 if len(bboxes) > 0:

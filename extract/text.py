@@ -1,5 +1,5 @@
 from .bbox import bbox_from_node_attrs
-
+import copy
 
 class Text(object):
     """A class containing information from a <text> node"""
@@ -17,6 +17,9 @@ def get_text_from_xml_element(xml_element):
 
 
 def text_attrs_styles_are_equal(attr1, attr2):
+    attr1 = copy.copy(attr1)
+    attr2 = copy.copy(attr2)
+
     if 'bbox' in attr1:
         del attr1['bbox']
 
