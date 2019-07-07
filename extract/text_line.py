@@ -1,14 +1,15 @@
 from .text import Text, get_text_from_xml_element, text_attrs_styles_are_equal
 from .bbox_merge import bbox_merge
+from .bbox import bbox_from_node_attrs
 import copy
 
 
 class TextLine(object):
     """A class containing information from a <textline> node"""
 
-    def __init__(self):
+    def __init__(self, bbox):
         self.texts = []
-        self.attr = {}
+        self.bbox = bbox
 
     def __iter__(self):
         return iter(self.texts)
@@ -46,8 +47,8 @@ class TextLine(object):
 
 
 def get_text_line_from_xml_element(xml_element):
-    t = TextLine()
-    t.attr = xml_element.attrib
+    t = TextLine(bbox_from_node_attrs(xml_element.attrib))
+
     for text_node in xml_element.findall('./text'):
         t.add_text_child(get_text_from_xml_element(text_node))
 

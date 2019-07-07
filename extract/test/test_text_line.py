@@ -1,4 +1,5 @@
 from extract.text_line import get_text_line_from_xml_element
+from extract.bbox import BBox
 import xml.etree.ElementTree as ET
 import unittest
 
@@ -29,6 +30,9 @@ class TestGetTextLineFromXmlElement(unittest.TestCase):
 
     def test_correct_number_of_texts(self):
         self.assertEqual(len(self.text_line.texts), 16)
+
+    def test_text_line_bbox_is_retained(self):
+        self.assertIsInstance(self.text_line.bbox, BBox)
 
 
 class TestTextLineCompactTexts(unittest.TestCase):

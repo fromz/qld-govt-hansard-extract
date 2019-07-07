@@ -1,6 +1,7 @@
 from .bbox import bbox_from_node_attrs
 import copy
 
+
 class Text(object):
     """A class containing information from a <text> node"""
     def __init__(self, attr, contents):
