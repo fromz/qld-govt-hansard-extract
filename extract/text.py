@@ -1,4 +1,4 @@
-from .bbox import bbox_from_string, InvalidBboxString
+from .bbox import bbox_from_node_attrs
 
 
 class Text(object):
@@ -6,13 +6,7 @@ class Text(object):
     def __init__(self, attr, contents):
         self.attr = attr
         self.contents = contents
-        if 'bbox' in attr:
-            try:
-                self.bbox = bbox_from_string(attr['bbox'])
-            except InvalidBboxString:
-                self.bbox = None
-        else:
-            self.bbox = None
+        self.bbox = bbox_from_node_attrs(attr)
 
     def is_blank_node(self):
         return self.contents.strip() == ''
