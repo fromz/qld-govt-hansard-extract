@@ -1,14 +1,16 @@
 from .text import Text, get_text_from_xml_element, text_attrs_styles_are_equal
 from .bbox_merge import bbox_merge
+from .bbox import bbox_from_node_attrs
+from .positioned_node import PositionedNode
 import copy
 
 
-class TextLine(object):
+class TextLine(PositionedNode):
     """A class containing information from a <textline> node"""
 
-    def __init__(self):
+    def __init__(self, bbox):
+        super().__init__(bbox)
         self.texts = []
-        self.attr = {}
 
     def __iter__(self):
         return iter(self.texts)
@@ -19,26 +21,19 @@ class TextLine(object):
     """ compacts text nodes by their style attributes, merging their bboxes """
     def compact_texts(self):
         merged_texts = []
-        ctext = Text()
+        ctext = Text({}, '')
         bboxes = []
         for text in self:
-            if text_attrs_styles_are_equal(copy.copy(ctext.attr), copy.copy(text.attr)) is False:
+            if text_attrs_styles_are_equal(ctext.attr, text.attr) is False:
                 # New style of text, finish up last iteration
                 # Make new bbox
                 if len(bboxes) > 0:
-                    bbox = bbox_merge(bboxes)
-                    ctext.attr['bbox'] = "{},{},{},{}".format(
-                        bbox.upper_left_coordinate.x,
-                        bbox.upper_left_coordinate.y,
-                        bbox.lower_right_coordinate.x,
-                        bbox.lower_right_coordinate.y
-                    )
+                    ctext.bbox = bbox_merge(bboxes)
 
                 bboxes = [] # reset bboxes
 
                 merged_texts.append(ctext)
-                ctext = Text() # reset ctext
-                ctext.attr = text.attr # Set the ctext attributes to be the current text node (copying styles etc)
+                ctext = Text(text.attr, '') # reset ctext
 
             # Not all text nodes have a bounding box
             if text.bbox:
@@ -53,8 +48,8 @@ class TextLine(object):
 
 
 def get_text_line_from_xml_element(xml_element):
-    t = TextLine()
-    t.attr = xml_element.attrib
+    t = TextLine(bbox_from_node_attrs(xml_element.attrib))
+
     for text_node in xml_element.findall('./text'):
         t.add_text_child(get_text_from_xml_element(text_node))
 
