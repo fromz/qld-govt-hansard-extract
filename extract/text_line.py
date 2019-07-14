@@ -27,7 +27,7 @@ class TextLine(PositionedNode):
         all_texts = []
 
         texts = iter(self.texts)
-        new_text = next(texts)
+        new_text = next(texts, None)
         
         while new_text:
             current_bboxes = []
