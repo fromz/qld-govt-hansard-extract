@@ -1,4 +1,4 @@
-from .bbox import bbox_from_node_attrs
+from .bbox import bbox_from_string, BBox
 from .positioned_node import PositionedNode
 import copy
 
@@ -9,8 +9,8 @@ class Text(PositionedNode):
     def dump(self):
         return "<{} bbox=\"{}\">{}</{}>".format("text", self.dump_bbox_string(), self.contents, "text")
 
-    def __init__(self, attr, contents):
-        super().__init__(bbox_from_node_attrs(attr))
+    def __init__(self, attr, bbox, contents):
+        super().__init__(bbox)
         self.attr = attr
         self.contents = contents
 
@@ -25,7 +25,11 @@ def get_text_from_xml_element(xml_element):
         text = text[0][0]
     else:
         text = ' '
-    return Text(xml_element.attrib, text)
+    bbox = None
+    if 'bbox' in xml_element.attrib:
+        bbox = bbox_from_string(xml_element.attrib['bbox'])
+
+    return Text(xml_element.attrib, bbox, text)
 
 
 def text_attrs_styles_are_equal(attr1, attr2):
