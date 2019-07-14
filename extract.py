@@ -2,8 +2,6 @@ import sys
 import argparse
 import xml.etree.ElementTree as ET
 from extract.page import get_page_from_xml_element
-from extract.bbox import BBox
-from extract.coordinate import Coordinate
 
 def main():
     """Tool to parse XML fom the queensland government."""
@@ -11,8 +9,6 @@ def main():
     parser = argparse.ArgumentParser(description='Extract content')
     parser.add_argument(dest='path_to_xml', action='store', type=str)
     results = parser.parse_args()
-
-    header_area = BBox(Coordinate(0, 0), Coordinate(139, 841.920))
 
     root = ET.parse(results.path_to_xml).getroot()
     # todo: iterate by page, have some mechanism to identify text boxes based on positional details and/or style:

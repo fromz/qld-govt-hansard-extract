@@ -47,13 +47,3 @@ def bbox_from_string(bbox_string):
     lower_right_coordinate = Coordinate(float(points[2]), float(points[3]))
 
     return BBox(upper_left_coordinate, lower_right_coordinate)
-
-
-def bbox_from_node_attrs(attr):
-    if 'bbox' in attr:
-        try:
-            return bbox_from_string(attr['bbox'])
-        except InvalidBboxString:
-            return None
-
-    return None

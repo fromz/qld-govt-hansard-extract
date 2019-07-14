@@ -1,8 +1,8 @@
 from .text import Text, get_text_from_xml_element, text_attrs_styles_are_equal
 from .bbox_merge import bbox_merge
-from .bbox import bbox_from_node_attrs
+from .bbox import bbox_from_string
 from .positioned_node import PositionedNode
-from .bbox import BBox
+
 
 
 class TextLine(PositionedNode):
@@ -46,7 +46,8 @@ class TextLine(PositionedNode):
 
 
 def get_text_line_from_xml_element(xml_element):
-    t = TextLine(bbox_from_node_attrs(xml_element.attrib))
+
+    t = TextLine(bbox_from_string(xml_element.attrib['bbox']))
 
     for text_xml_element in xml_element.findall('./text'):
         if len(text_xml_element.attrib) == 0:
