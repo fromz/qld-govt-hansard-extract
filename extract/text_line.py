@@ -24,31 +24,25 @@ class TextLine(PositionedNode):
 
     """ compacts text nodes by their style attributes, merging their bboxes """
     def compact_texts(self):
-        merged_texts = []
-        bboxes = []
-        merged_text = Text({}, '')
-        for i, text in enumerate(self.texts):
-            styles_are_equal = text_attrs_styles_are_equal(merged_text.attr, text.attr)
-            is_last_iteration = i + 1 == len(self.texts)
+        all_texts = []
 
-            if is_last_iteration:
-                bboxes.append(text.bbox)
-                merged_text.contents += text.contents
+        texts = iter(self.texts)
+        new_text = next(texts)
+        
+        while new_text:
+            current_bboxes = []
+            current_span_text = Text(new_text.attr, '')
+            
+            while new_text and text_attrs_styles_are_equal(current_span_text.attr, new_text.attr):
+                current_bboxes.append(new_text.bbox)
+                current_span_text.contents += new_text.contents
+                new_text = next(texts, None)
+            else:
+                # We've hit the end of the current span, so merge bboxes
+                current_span_text.bbox = bbox_merge(current_bboxes)
+                all_texts.append(current_span_text)
 
-            if styles_are_equal is False or is_last_iteration:
-                # New style of text, finish up last iteration
-                merged_text.bbox = bbox_merge(bboxes)
-                merged_texts.append(merged_text)
-
-                bboxes = [] # reset bboxes
-                merged_text = Text(text.attr, '') # reset ctext
-
-            bboxes.append(text.bbox)
-            merged_text.contents += text.contents
-
-        merged_texts.pop(0)
-
-        self.texts = merged_texts
+        self.texts = all_texts
 
 
 def get_text_line_from_xml_element(xml_element):
