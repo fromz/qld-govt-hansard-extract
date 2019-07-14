@@ -8,20 +8,22 @@ class PositionedNode(object):
 
         return self.bbox.__repr__()
 
-    def fits_in(self, bbox):
+    def is_above(self, y):
         if not self.bbox:
             return False
 
-        if self.bbox.upper_left_coordinate.x < bbox.upper_left_coordinate.x:
-            return False
+        return self.bbox.upper_left_coordinate.y > y
 
-        if self.bbox.upper_left_coordinate.y < bbox.upper_left_coordinate.y:
-            return False
+    def width(self):
+        return round(self.bbox.lower_right_coordinate.x - self.bbox.upper_left_coordinate.x, 3)
 
-        if self.bbox.lower_right_coordinate.x > bbox.lower_right_coordinate.x:
-            return False
+    def space_left(self, min_x):
+        return self.bbox.upper_left_coordinate.x - min_x
 
-        if self.bbox.lower_right_coordinate.y > bbox.lower_right_coordinate.y:
-            return False
+    def space_right(self, max_x):
+        return max_x - self.bbox.lower_right_coordinate.x
 
-        return True
+    # def is_center_x(self, min_x, max_x):
+    #     print(self.space_left(min_x))
+    #     print(self.space_right(max_x))
+    #     print(self.width())

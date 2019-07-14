@@ -28,14 +28,17 @@ def main():
 
                 t = ''
                 for text in text_line:
+                    if text.is_above(790):
+                        continue
 
                     if not text.is_blank_node():
                         t += text.contents
-                # if t.strip():
-                #     print(t)
+
+                if t.strip():
+                    print(t)
 
         dump = page.dump()
-        print(dump)
+        # print(dump)
 
 if __name__ == '__main__':
     sys.exit(main())
