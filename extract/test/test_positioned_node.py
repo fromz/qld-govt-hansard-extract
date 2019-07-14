@@ -26,9 +26,11 @@ class TestPositionedNode(unittest.TestCase):
     def test_space_right(self):
         self.assertEqual(760.191, self.positioned_node.space_right(900))
 
-    # def test_is_center_true(self):
-    #     positioned_node = PositionedNode(
-    #         BBox(Coordinate(218.4, 748.128),
-    #              Coordinate(379.764, 765.312))
-    #     )
-    #     positioned_node.is_center_x(0, 841)
+    def test_is_center_true(self):
+        positioned_node = PositionedNode(
+            BBox(Coordinate(218.4, 748.128),
+                 Coordinate(379.764, 765.312))
+        )
+
+        # Min: 73.794, Max: 527.736
+        self.assertTrue(positioned_node.is_center_x(73.794, 527.736, 10))

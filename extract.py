@@ -18,24 +18,42 @@ def main():
     # todo: iterate by page, have some mechanism to identify text boxes based on positional details and/or style:
     #  - to ignore header and footer content
     #  - to identify headers
+    pages = []
     xml_page_elements = root.findall('.//page')
     for xml_page_element in xml_page_elements:
         page = get_page_from_xml_element(xml_page_element)
         for text_box in page.text_boxes:
-
             for text_line in text_box:
                 text_line.compact_texts()
+                for i, text in enumerate(text_line.texts):
+                    if text.is_above(790): # delete headers
+                        del text_line.texts[i]
+
+        pages.append(page)
+
+    for page in pages:
+        min_x = page.min_x_boundary()
+        max_x = page.max_x_boundary()
+
+        print("Min: {}, Max: {}".format(min_x, max_x))
+
+        for text_box in page.text_boxes:
+            for text_line in text_box:
 
                 t = ''
                 for text in text_line:
-                    if text.is_above(790):
+                    if text.is_blank_node():
                         continue
 
-                    if not text.is_blank_node():
+                    if text.is_center_x(min_x, max_x, 10): # is a header
+                        t += "<header>{}</header>".format(text.contents)
+                    else:
                         t += text.contents
 
                 if t.strip():
                     print(t)
+
+
 
         dump = page.dump()
         # print(dump)
