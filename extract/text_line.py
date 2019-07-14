@@ -34,7 +34,7 @@ class TextLine(PositionedNode):
             current_span_text = Text(copy.copy(new_text.bbox), '', copy.copy(new_text.style))
             current_span_text.contents = ''
 
-            while new_text and not current_span_text.style.matches(new_text.style):
+            while new_text and current_span_text.style.matches(new_text.style):
                 current_bboxes.append(new_text.bbox)
                 current_span_text.contents += new_text.contents
                 new_text = next(texts, None)
