@@ -1,8 +1,8 @@
-from .text import Text, get_text_from_xml_element, text_attrs_styles_are_equal
+from .text import Text, get_text_from_xml_element
 from .bbox_merge import bbox_merge
 from .bbox import bbox_from_string
 from .positioned_node import PositionedNode
-
+import copy
 
 
 class TextLine(PositionedNode):
@@ -31,9 +31,10 @@ class TextLine(PositionedNode):
         
         while new_text:
             current_bboxes = []
-            current_span_text = Text(new_text.attr, new_text.bbox, '')
-            
-            while new_text and text_attrs_styles_are_equal(current_span_text.attr, new_text.attr):
+            current_span_text = Text(copy.copy(new_text.bbox), '', copy.copy(new_text.style))
+            current_span_text.contents = ''
+
+            while new_text and not current_span_text.style.matches(new_text.style):
                 current_bboxes.append(new_text.bbox)
                 current_span_text.contents += new_text.contents
                 new_text = next(texts, None)
