@@ -8,6 +8,13 @@ import copy
 class TextLine(PositionedNode):
     """A class containing information from a <textline> node"""
 
+    def dump(self):
+        c = ''
+        for text in self.texts:
+            c += text.dump()
+
+        return "<{} bbox=\"{}\">{}</{}>".format("textline", self.dump_bbox_string(), c, "textline")
+
     def __init__(self, bbox):
         super().__init__(bbox)
         self.texts = []
@@ -15,34 +22,31 @@ class TextLine(PositionedNode):
     def __iter__(self):
         return iter(self.texts)
 
-    def add_text_child(self, text):
-        self.texts.append(copy.deepcopy(text))
-
     """ compacts text nodes by their style attributes, merging their bboxes """
     def compact_texts(self):
         merged_texts = []
-        ctext = Text({}, '')
         bboxes = []
-        for text in self:
-            if text_attrs_styles_are_equal(ctext.attr, text.attr) is False:
+        merged_text = Text({}, '')
+        for i, text in enumerate(self.texts):
+            styles_are_equal = text_attrs_styles_are_equal(merged_text.attr, text.attr)
+            is_last_iteration = i + 1 == len(self.texts)
+
+            if is_last_iteration:
+                bboxes.append(text.bbox)
+                merged_text.contents += text.contents
+
+            if styles_are_equal is False or is_last_iteration:
                 # New style of text, finish up last iteration
-                # Make new bbox
-                if len(bboxes) > 0:
-                    ctext.bbox = bbox_merge(bboxes)
+                merged_text.bbox = bbox_merge(bboxes)
+                merged_texts.append(merged_text)
 
                 bboxes = [] # reset bboxes
+                merged_text = Text(text.attr, '') # reset ctext
 
-                merged_texts.append(ctext)
-                ctext = Text(text.attr, '') # reset ctext
+            bboxes.append(text.bbox)
+            merged_text.contents += text.contents
 
-            # Not all text nodes have a bounding box
-            if text.bbox:
-                bboxes.append(text.bbox)
-
-            ctext.contents += text.contents
-
-        if len(merged_texts) > 0:
-            merged_texts.pop(0)
+        merged_texts.pop(0)
 
         self.texts = merged_texts
 
@@ -50,7 +54,10 @@ class TextLine(PositionedNode):
 def get_text_line_from_xml_element(xml_element):
     t = TextLine(bbox_from_node_attrs(xml_element.attrib))
 
-    for text_node in xml_element.findall('./text'):
-        t.add_text_child(get_text_from_xml_element(text_node))
+    for text_xml_element in xml_element.findall('./text'):
+        if len(text_xml_element.attrib) == 0:
+            continue
+
+        t.texts.append(get_text_from_xml_element(text_xml_element))
 
     return t

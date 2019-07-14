@@ -2,7 +2,16 @@ class PositionedNode(object):
     def __init__(self, bbox):
         self.bbox = bbox
 
+    def dump_bbox_string(self):
+        if not self.bbox:
+            return ''
+
+        return self.bbox.__repr__()
+
     def fits_in(self, bbox):
+        if not self.bbox:
+            return False
+
         if self.bbox.upper_left_coordinate.x < bbox.upper_left_coordinate.x:
             return False
 
