@@ -6,7 +6,20 @@ class BBoxRequiresTwoCoordinates(Exception):
 
 
 class BBox(object):
-    """Represents a bounding box."""
+    """Represents a bounding box.
+    x0: the distance from the left of the page to the left edge of the box.
+    y0: the distance from the bottom of the page to the lower edge of the box.
+    x1: the distance from the left of the page to the right edge of the box.
+    y1: the distance from the bottom of the page to the upper edge of the box.
+    """
+
+    def __repr__(self):
+        return '{},{},{},{}'.format(
+            self.upper_left_coordinate.x or '',
+            self.upper_left_coordinate.y or '',
+            self.lower_right_coordinate.x or '',
+            self.lower_right_coordinate.y or '',
+        )
 
     def __init__(self, upper_left_coordinate=None, lower_right_coordinate=None):
         """Create a BBox from two coordinate pairs.

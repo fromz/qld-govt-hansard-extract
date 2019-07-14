@@ -29,7 +29,7 @@ class TestGetTextLineFromXmlElement(unittest.TestCase):
         self.text_line = get_text_line_from_xml_element(ET.fromstring(s))
 
     def test_correct_number_of_texts(self):
-        self.assertEqual(len(self.text_line.texts), 16)
+        self.assertEqual(len(self.text_line.texts), 15)
 
     def test_text_line_bbox_is_retained(self):
         self.assertIsInstance(self.text_line.bbox, BBox)

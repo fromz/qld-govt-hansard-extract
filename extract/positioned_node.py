@@ -2,17 +2,47 @@ class PositionedNode(object):
     def __init__(self, bbox):
         self.bbox = bbox
 
-    def fits_in(self, bbox):
-        if self.bbox.upper_left_coordinate.x < bbox.upper_left_coordinate.x:
+    def dump_bbox_string(self):
+        if not self.bbox:
+            return ''
+
+        return self.bbox.__repr__()
+
+    def is_above(self, y):
+        if not self.bbox:
             return False
 
-        if self.bbox.upper_left_coordinate.y < bbox.upper_left_coordinate.y:
+        return self.bbox.upper_left_coordinate.y > y
+
+    def width(self):
+        return round(self.bbox.lower_right_coordinate.x - self.bbox.upper_left_coordinate.x, 3)
+
+    def space_left(self, min_x):
+        return round(self.bbox.upper_left_coordinate.x - min_x, 3)
+
+    def space_right(self, max_x):
+        return round(max_x - self.bbox.lower_right_coordinate.x, 3)
+
+    def is_center_x(self, min_x, max_x, tolerance_percent=None):
+        space_left = self.space_left(min_x)
+        space_right = self.space_right(max_x)
+
+        if tolerance_percent and tolerance_percent > 0:
+            if space_right == space_left:
+                return True
+
+            total = space_left + space_right
+
+            diff = 0
+            if space_right > space_left:
+                diff = space_right - space_left
+
+            if space_left > space_right:
+                diff = space_left - space_right
+
+            if (diff / total) * 100 < tolerance_percent:
+                return True
+
             return False
 
-        if self.bbox.lower_right_coordinate.x > bbox.lower_right_coordinate.x:
-            return False
-
-        if self.bbox.lower_right_coordinate.y > bbox.lower_right_coordinate.y:
-            return False
-
-        return True
+        return self.space_left(min_x) == self.space_right(max_x)
