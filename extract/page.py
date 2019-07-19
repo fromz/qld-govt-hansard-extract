@@ -10,6 +10,13 @@ class Page(PositionedNode):
         super().__init__(bbox)
         self.text_boxes = []
 
+    def __repr__(self) -> str:
+        c = ''
+        for text_box in self.text_boxes:
+            c += repr(text_box)
+
+        return "<{}>{}</{}>".format("page", c, "page")
+
     def min_x_boundary(self):
         xs = []
         for text_box in self.text_boxes:
@@ -27,14 +34,6 @@ class Page(PositionedNode):
                     xs.append(text.bbox.lower_right_coordinate.x)
 
         return max(xs)
-
-    def dump(self) -> str:
-        c = ''
-        for text_box in self.text_boxes:
-            c += text_box.dump()
-
-        return "<{}>{}</{}>".format("page", c, "page")
-
 
 def get_page_from_xml_element(xml_element):
     page = Page(bbox_from_string(xml_element.attrib['bbox']))

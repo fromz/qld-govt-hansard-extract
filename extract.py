@@ -49,8 +49,7 @@ def main():
                 if t.strip():
                     print(t)
 
-        dump = page.dump()
-        # print(dump)
+        print(repr(page))
 
 if __name__ == '__main__':
     sys.exit(main())

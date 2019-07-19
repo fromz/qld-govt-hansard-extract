@@ -4,15 +4,15 @@ from .text_line import get_text_line_from_xml_element
 class TextBox:
     """A class containing information from a <textline> node"""
 
-    def dump(self):
-        c = ''
-        for text_line in self.text_lines:
-            c += text_line.dump()
-
-        return "<{}>{}</{}>".format("textbox", c, "textbox")
-
     def __init__(self):
         self.text_lines = []
+
+    def __repr__(self):
+        c = ''
+        for text_line in self.text_lines:
+            c += repr(text_line)
+
+        return "<{}>{}</{}>".format("textbox", c, "textbox")
 
     def __iter__(self):
         return iter(self.text_lines)

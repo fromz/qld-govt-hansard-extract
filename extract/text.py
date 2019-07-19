@@ -6,10 +6,14 @@ from .text_style import TextStyle
 class Text(PositionedNode):
     """A class containing information from a <text> node"""
 
-    def dump(self):
-        return "<{} bbox=\"{}\">{}</{}>".format("text", self.dump_bbox_string(), self.contents, "text")
+    def __repr__(self):
+        return "<text bbox=\"{}\" {}>{}</text>".format(
+            self.dump_bbox_string(),
+            repr(self.style) if self.style else "",
+            self.contents,
+        )
 
-    def __init__(self, bbox, contents, style=None):
+    def __init__(self, bbox, contents, style: TextStyle = None):
         super().__init__(bbox)
         self.contents = contents
         self.style = style

@@ -8,16 +8,16 @@ import copy
 class TextLine(PositionedNode):
     """A class containing information from a <textline> node"""
 
-    def dump(self):
-        c = ''
-        for text in self.texts:
-            c += text.dump()
-
-        return "<{} bbox=\"{}\">{}</{}>".format("textline", self.dump_bbox_string(), c, "textline")
-
     def __init__(self, bbox):
         super().__init__(bbox)
         self.texts = []
+
+    def __repr__(self):
+        c = ''
+        for text in self.texts:
+            c += repr(text)
+
+        return "<{} bbox=\"{}\">{}</{}>".format("textline", self.dump_bbox_string(), c, "textline")
 
     def __iter__(self):
         return iter(self.texts)

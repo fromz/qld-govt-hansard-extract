@@ -7,6 +7,23 @@ class TextStyle(object):
         self.colour_space = colour_space
         self.n_colour = n_colour
 
+    def __repr__(self):
+        attrs = []
+        if self.font:
+            attrs.append('font="{}"'.format(self.font))
+
+        if self.font_size:
+            attrs.append('font_size="{}"'.format(self.font_size))
+
+        if self.colour_space:
+            attrs.append('colour_space="{}"'.format(self.colour_space))
+
+        if self.n_colour:
+            attrs.append('n_colour="{}"'.format(self.n_colour))
+
+        return " ".join(attrs)
+
+
     def matches(self, style):
         if style.font != self.font:
             return False
