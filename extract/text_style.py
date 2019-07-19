@@ -1,4 +1,4 @@
-class TextStyle():
+class TextStyle(object):
 
     """A class containing information from a <page> node"""
     def __init__(self, font=None, font_size=None, colour_space=None, n_colour=None):
@@ -8,16 +8,16 @@ class TextStyle():
         self.n_colour = n_colour
 
     def matches(self, style):
-        if style.font is not self.font:
+        if style.font != self.font:
             return False
 
-        if style.font_size is not self.font_size:
+        if style.font_size != self.font_size:
             return False
 
-        if style.colour_space is not self.colour_space:
+        if style.colour_space != self.colour_space:
             return False
 
-        if style.n_colour is not self.n_colour:
+        if style.n_colour != self.n_colour:
             return False
 
         return True
