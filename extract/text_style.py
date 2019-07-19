@@ -23,7 +23,6 @@ class TextStyle(object):
 
         return " ".join(attrs)
 
-
     def matches(self, style):
         if style.font != self.font:
             return False

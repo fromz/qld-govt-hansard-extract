@@ -13,7 +13,7 @@ class Text(PositionedNode):
             self.contents,
         )
 
-    def __init__(self, bbox, contents, style: TextStyle = None):
+    def __init__(self, bbox, contents: str = '', style: TextStyle = None):
         super().__init__(bbox)
         self.contents = contents
         self.style = style
@@ -33,7 +33,6 @@ def get_text_from_xml_element(xml_element):
     if 'bbox' in xml_element.attrib:
         bbox = bbox_from_string(xml_element.attrib['bbox'])
 
-    #font = None, font_size = None, colour_space = None, n_colour = None
     return Text(bbox, text, TextStyle(
         xml_element.attrib['font'],
         xml_element.attrib['size'],
