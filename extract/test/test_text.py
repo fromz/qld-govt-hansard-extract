@@ -1,7 +1,8 @@
-from extract.text import get_text_from_xml_element
 from extract.text_style import TextStyle
 import xml.etree.ElementTree as ET
 import unittest
+
+from extract.xml_parser import get_text_from_xml_element
 
 
 class TestGetTextFromXmlElement(unittest.TestCase):

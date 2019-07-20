@@ -1,4 +1,4 @@
-from .text import Text, get_text_from_xml_element
+from .text import Text
 from .bbox_merge import bbox_merge
 from .bbox import bbox_from_string
 from .positioned_node import PositionedNode
@@ -45,15 +45,3 @@ class TextLine(PositionedNode):
 
         self.texts = all_texts
 
-
-def get_text_line_from_xml_element(xml_element):
-
-    t = TextLine(bbox_from_string(xml_element.attrib['bbox']))
-
-    for text_xml_element in xml_element.findall('./text'):
-        if len(text_xml_element.attrib) == 0:
-            continue
-
-        t.texts.append(get_text_from_xml_element(text_xml_element))
-
-    return t

@@ -6,6 +6,7 @@ from extract.bbox import BBox
 from extract.coordinate import Coordinate
 import unittest
 
+
 class TestPage(unittest.TestCase):
     def setUp(self):
         self.page = Page({})

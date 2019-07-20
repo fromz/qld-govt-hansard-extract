@@ -1,7 +1,7 @@
-from extract.text_line import get_text_line_from_xml_element
 from extract.bbox import BBox
 import xml.etree.ElementTree as ET
 import unittest
+from extract.xml_parser import get_text_line_from_xml_element
 
 s = """<textline bbox="459.840,753.697,521.235,765.210">
 <text font="Arial-BoldMT" bbox="459.840,753.697,462.075,765.210" colourspace="ICCBased" ncolour="[0]" size="11.513">I</text>

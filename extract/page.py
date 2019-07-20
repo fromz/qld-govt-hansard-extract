@@ -1,6 +1,4 @@
 from .positioned_node import PositionedNode
-from .text_box import get_text_box_from_xml_element
-from .bbox import bbox_from_string
 
 
 class Page(PositionedNode):
@@ -43,9 +41,3 @@ class Page(PositionedNode):
                     xs.append(text.bbox.lower_right_coordinate.x)
 
         return max(xs)
-
-def get_page_from_xml_element(xml_element):
-    page = Page(bbox_from_string(xml_element.attrib['bbox']))
-    for text_box_node in xml_element.findall('./textbox'):
-        page.text_boxes.append(get_text_box_from_xml_element(text_box_node))
-    return page
