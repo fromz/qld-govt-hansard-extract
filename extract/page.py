@@ -17,6 +17,15 @@ class Page(PositionedNode):
 
         return "<{}>{}</{}>".format("page", c, "page")
 
+    def texts(self):
+        texts = []
+        for text_box in self.text_boxes:
+            for text_line in text_box.text_lines:
+                for text in text_line:
+                    texts.append(text)
+
+        return texts
+
     def min_x_boundary(self):
         xs = []
         for text_box in self.text_boxes:

@@ -3,6 +3,10 @@ import argparse
 import xml.etree.ElementTree as ET
 from extract.page import get_page_from_xml_element
 
+
+debug = False
+
+
 def main():
     """Tool to parse XML fom the queensland government."""
 
@@ -11,9 +15,6 @@ def main():
     results = parser.parse_args()
 
     root = ET.parse(results.path_to_xml).getroot()
-    # todo: iterate by page, have some mechanism to identify text boxes based on positional details and/or style:
-    #  - to ignore header and footer content
-    #  - to identify headers
     pages = []
     xml_page_elements = root.findall('.//page')
     for xml_page_element in xml_page_elements:
@@ -21,14 +22,19 @@ def main():
 
         min_x = page.min_x_boundary()
         max_x = page.max_x_boundary()
-        print("Min: {}, Max: {}".format(min_x, max_x))
+        if debug:
+            print("Min: {}, Max: {}".format(min_x, max_x))
 
+        # Apply conditional attributes and remove unneeded nodes
         for text_box in page.text_boxes:
             for text_line in text_box:
                 text_line.compact_texts()
                 for i, text in enumerate(text_line.texts):
                     if text.is_blank_node() or text.contents.strip() == '':
                         del text_line.texts[i]
+
+                    if int(text.space_left(min_x)) == 28:
+                        text.flags.append('paragraph-start')
 
                     if text.is_center_x(min_x, max_x, 10): # is a header
                         text.flags.append('header')
@@ -40,19 +46,14 @@ def main():
 
         pages.append(page)
 
+    # prepare for output
     for page in pages:
 
-        for text_box in page.text_boxes:
-            for text_line in text_box:
-
-                t = ''
-                for text in text_line:
-                    t += "{}{}".format(
-                        ",".join(text.flags),
-                        text.contents
-                    )
-
-                print(t)
+        for text in page.texts():
+            print("{}{}".format(
+                "{}: ".format(",".join(text.flags)) if len(text.flags) > 0 else "",
+                text.contents
+            ))
 
         # print(repr(page))
 
