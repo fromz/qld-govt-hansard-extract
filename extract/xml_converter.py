@@ -48,7 +48,7 @@ def get_text_from_xml_element(xml_element):
 
     return Text(bbox, text, TextStyle(
         xml_element.attrib['font'],
-        xml_element.attrib['size'],
+        float(xml_element.attrib['size']),
         xml_element.attrib['colourspace'],
         xml_element.attrib['ncolour']
     ))
