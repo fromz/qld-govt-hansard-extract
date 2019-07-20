@@ -71,7 +71,7 @@ class TestTextLineCompactTexts(unittest.TestCase):
         for nodes_expected_values in self.expected_values:
             text_node = self.compacted_text_line.texts[nodes_expected_values['node']]
             self.assertEqual(
-                text_node.attr['font'],
+                text_node.style.font,
                 nodes_expected_values['font'],
                 "Node {}".format(nodes_expected_values['node'])
             )
@@ -80,7 +80,7 @@ class TestTextLineCompactTexts(unittest.TestCase):
         for nodes_expected_values in self.expected_values:
             text_node = self.compacted_text_line.texts[nodes_expected_values['node']]
             self.assertEqual(
-                text_node.attr['size'],
+                text_node.style.font_size,
                 nodes_expected_values['size'],
                 "Node {}".format(nodes_expected_values['node'])
             )

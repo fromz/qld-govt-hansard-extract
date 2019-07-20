@@ -1,18 +1,22 @@
-from .bbox import bbox_from_node_attrs
+from .bbox import bbox_from_string, BBox
 from .positioned_node import PositionedNode
-import copy
+from .text_style import TextStyle
 
 
 class Text(PositionedNode):
     """A class containing information from a <text> node"""
 
-    def dump(self):
-        return "<{} bbox=\"{}\">{}</{}>".format("text", self.dump_bbox_string(), self.contents, "text")
+    def __repr__(self):
+        return "<text bbox=\"{}\" {}>{}</text>".format(
+            self.dump_bbox_string(),
+            repr(self.style) if self.style else "",
+            self.contents,
+        )
 
-    def __init__(self, attr, contents):
-        super().__init__(bbox_from_node_attrs(attr))
-        self.attr = attr
+    def __init__(self, bbox, contents: str = '', style: TextStyle = None):
+        super().__init__(bbox)
         self.contents = contents
+        self.style = style
 
     def is_blank_node(self):
         return self.contents.strip() == ''
@@ -25,20 +29,13 @@ def get_text_from_xml_element(xml_element):
         text = text[0][0]
     else:
         text = ' '
-    return Text(xml_element.attrib, text)
+    bbox = None
+    if 'bbox' in xml_element.attrib:
+        bbox = bbox_from_string(xml_element.attrib['bbox'])
 
-
-def text_attrs_styles_are_equal(attr1, attr2):
-    attr1 = copy.copy(attr1)
-    attr2 = copy.copy(attr2)
-
-    if 'bbox' in attr1:
-        del attr1['bbox']
-
-    if 'bbox' in attr2:
-        del attr2['bbox']
-
-    if len(attr1.keys() - attr2.keys()) > 0:
-        return False
-
-    return list(attr1.values()) == list(attr2.values())
+    return Text(bbox, text, TextStyle(
+        xml_element.attrib['font'],
+        xml_element.attrib['size'],
+        xml_element.attrib['colourspace'],
+        xml_element.attrib['ncolour']
+    ))
