@@ -28,40 +28,15 @@ class TestGetTextFromXmlElement(unittest.TestCase):
 
 
 class TestTextAttrsStylesAreEqual(unittest.TestCase):
+
     def test_text_attrs_styles_are_equal_true_when_same(self):
         self.assertTrue(TextStyle("ArialMT", "10.975", "ICCBased", "[0]")
                         .matches(TextStyle("ArialMT", "10.975", "ICCBased", "[0]")))
 
-    # def test_text_attrs_styles_are_equal_false_when_diff(self):
-    #     attr1 = {
-    #         'font': "ArialMT",
-    #         'bbox':  "519.000,754.107,521.235,765.082",
-    #         'colourspace': "ICCBased",
-    #         'ncolour':  "[0]",
-    #         'size':  "10.974",
-    #     }
-    #     attr2 = {
-    #         'font': "Arial",
-    #         'bbox':  "519.000,754.107,521.235,765.082",
-    #         'colourspace': "ICCBased",
-    #         'ncolour':  "[0]",
-    #         'size':  "10.975",
-    #     }
-    #     self.assertFalse(text_attrs_styles_are_equal(attr1, attr2))
-    #
-    # def test_text_attrs_styles_are_equal_true_when_only_bbox_diff(self):
-    #     attr1 = {
-    #         'font': "ArialMT",
-    #         'bbox':  "519.000,754.107,52.235,765.082",
-    #         'colourspace': "ICCBased",
-    #         'ncolour':  "[0]",
-    #         'size':  "10.975",
-    #     }
-    #     attr2 = {
-    #         'font': "ArialMT",
-    #         'bbox':  "519.000,754.107,521.235,765.082",
-    #         'colourspace': "ICCBased",
-    #         'ncolour':  "[0]",
-    #         'size':  "10.975",
-    #     }
-    #     self.assertTrue(text_attrs_styles_are_equal(attr1, attr2))
+    def test_text_attrs_styles_are_equal_false_when_font_diff(self):
+        self.assertFalse(TextStyle("ArialMTBold", "10.975", "ICCBased", "[0]")
+                        .matches(TextStyle("ArialMT", "10.975", "ICCBased", "[0]")))
+
+    def test_text_attrs_styles_are_equal_false_when_font_size_diff(self):
+        self.assertFalse(TextStyle("ArialMT", "10.975", "ICCBased", "[0]")
+                        .matches(TextStyle("ArialMT", "10.974", "ICCBased", "[0]")))
