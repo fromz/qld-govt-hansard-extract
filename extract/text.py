@@ -6,8 +6,8 @@ class Text(PositionedNode):
     """A class containing information from a <text> node"""
 
     def __repr__(self):
-        return "<text bbox=\"{}\" {}{}>{}</text>".format(
-            self.dump_bbox_string(),
+        return "<text {} {}{}>{}</text>".format(
+            super().__repr__(),
             repr(self.style) if self.style else "",
             ' flags="{}"'.format(",".join(self.flags)) if len(self.flags) > 0 else "",
             self.contents,

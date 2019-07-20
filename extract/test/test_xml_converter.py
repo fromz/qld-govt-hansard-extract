@@ -2,6 +2,7 @@ import xml.etree.ElementTree as ET
 import unittest
 
 from extract.bbox import BBox
+from extract.coordinate import Coordinate
 from extract.xml_converter import get_text_from_xml_element, get_text_line_from_xml_element
 
 
@@ -19,7 +20,10 @@ class TestGetTextFromXmlElement(unittest.TestCase):
         self.assertEqual(self.text.style.font, 'ArialMT')
 
     def test_bbox_retained(self):
-        self.assertEqual(self.text.dump_bbox_string(), '519.0,754.107,521.235,765.082')
+        self.assertIsInstance(self.text.bbox, BBox)
+        self.assertIsInstance(self.text.bbox.lower_right_coordinate, Coordinate)
+        self.assertIsInstance(self.text.bbox.upper_left_coordinate, Coordinate)
+        self.assertEqual(repr(self.text.bbox), '519.0,754.107,521.235,765.082')
 
     def test_colour_space_retained(self):
         self.assertEqual(self.text.style.colour_space, 'ICCBased')

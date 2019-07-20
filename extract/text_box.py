@@ -1,7 +1,11 @@
-class TextBox:
+from .positioned_node import PositionedNode
+
+
+class TextBox(PositionedNode):
     """A class containing information from a <textline> node"""
 
-    def __init__(self):
+    def __init__(self, bbox):
+        super().__init__(bbox)
         self.text_lines = []
 
     def __repr__(self):
@@ -9,7 +13,10 @@ class TextBox:
         for text_line in self.text_lines:
             c += repr(text_line)
 
-        return "<{}>{}</{}>".format("textbox", c, "textbox")
+        return "<textbox{}>{}</textbox>".format(
+            super().__repr__(),
+            c
+        )
 
     def __iter__(self):
         return iter(self.text_lines)

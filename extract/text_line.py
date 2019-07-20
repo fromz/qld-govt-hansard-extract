@@ -1,6 +1,5 @@
 from .text import Text
 from .bbox_merge import bbox_merge
-from .bbox import bbox_from_string
 from .positioned_node import PositionedNode
 import copy
 
@@ -17,7 +16,7 @@ class TextLine(PositionedNode):
         for text in self.texts:
             c += repr(text)
 
-        return "<{} bbox=\"{}\">{}</{}>".format("textline", self.dump_bbox_string(), c, "textline")
+        return "<textline {}>{}</textline>".format(super().__repr__(), c)
 
     def __iter__(self):
         return iter(self.texts)

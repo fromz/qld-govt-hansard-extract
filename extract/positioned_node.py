@@ -2,11 +2,8 @@ class PositionedNode(object):
     def __init__(self, bbox):
         self.bbox = bbox
 
-    def dump_bbox_string(self):
-        if not self.bbox:
-            return ''
-
-        return self.bbox.__repr__()
+    def __repr__(self):
+        return ' bbox="{}"'.format(repr(self.bbox)) if self.bbox else ''
 
     def is_above(self, y):
         if not self.bbox:
