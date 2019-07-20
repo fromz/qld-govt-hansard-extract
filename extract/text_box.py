@@ -16,3 +16,10 @@ class TextBox:
 
     def add_text_line_child(self, text_line):
         self.text_lines.append(text_line)
+
+    def contains_text_nodes(self):
+        for text_line in self.text_lines:
+            if len(text_line.texts) > 0:
+                return True
+
+        return False
