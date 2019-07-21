@@ -1,10 +1,11 @@
+from extract.positioned_nodes import PositionedNodes
 from .text import Text
 from .bbox_merge import bbox_merge
 from .positioned_node import PositionedNode
 import copy
 
 
-class TextLine(PositionedNode):
+class TextLine(PositionedNode, PositionedNodes):
     """A class containing information from a <textline> node"""
 
     def __init__(self, bbox):
@@ -20,6 +21,9 @@ class TextLine(PositionedNode):
 
     def __iter__(self):
         return iter(self.texts)
+
+    def positioned_nodes(self):
+        return self.texts
 
     """ compacts text nodes by their style attributes, merging their bboxes """
     def compact_texts(self):

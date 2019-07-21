@@ -1,7 +1,8 @@
+from extract.positioned_nodes import PositionedNodes
 from .positioned_node import PositionedNode
 
 
-class TextBox(PositionedNode):
+class TextBox(PositionedNode, PositionedNodes):
     """A class containing information from a <textline> node"""
 
     def __init__(self, bbox):
@@ -20,6 +21,9 @@ class TextBox(PositionedNode):
 
     def __iter__(self):
         return iter(self.text_lines)
+
+    def positioned_nodes(self):
+        return self.text_lines
 
     def add_text_line_child(self, text_line):
         self.text_lines.append(text_line)

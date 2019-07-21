@@ -1,7 +1,8 @@
+from extract.positioned_nodes import PositionedNodes
 from .positioned_node import PositionedNode
 
 
-class Page(PositionedNode):
+class Page(PositionedNode, PositionedNodes):
 
     """A class containing information from a <page> node"""
     def __init__(self, bbox):
@@ -14,6 +15,9 @@ class Page(PositionedNode):
             c += repr(text_box)
 
         return "<{}>{}</{}>".format("page", c, "page")
+
+    def positioned_nodes(self):
+        return self.text_boxes
 
     def texts(self):
         texts = []
