@@ -1,9 +1,8 @@
+from extract.positioned_nodes import PositionedNodes
 from .positioned_node import PositionedNode
-from .text_box import get_text_box_from_xml_element
-from .bbox import bbox_from_string
 
 
-class Page(PositionedNode):
+class Page(PositionedNode, PositionedNodes):
 
     """A class containing information from a <page> node"""
     def __init__(self, bbox):
@@ -16,6 +15,18 @@ class Page(PositionedNode):
             c += repr(text_box)
 
         return "<{}>{}</{}>".format("page", c, "page")
+
+    def positioned_nodes(self):
+        return self.text_boxes
+
+    def texts(self):
+        texts = []
+        for text_box in self.text_boxes:
+            for text_line in text_box.text_lines:
+                for text in text_line:
+                    texts.append(text)
+
+        return texts
 
     def min_x_boundary(self):
         xs = []
@@ -34,9 +45,3 @@ class Page(PositionedNode):
                     xs.append(text.bbox.lower_right_coordinate.x)
 
         return max(xs)
-
-def get_page_from_xml_element(xml_element):
-    page = Page(bbox_from_string(xml_element.attrib['bbox']))
-    for text_box_node in xml_element.findall('./textbox'):
-        page.text_boxes.append(get_text_box_from_xml_element(text_box_node))
-    return page

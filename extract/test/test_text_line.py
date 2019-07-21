@@ -1,44 +1,91 @@
-from extract.text_line import get_text_line_from_xml_element
 from extract.bbox import BBox
-import xml.etree.ElementTree as ET
 import unittest
 
-s = """<textline bbox="459.840,753.697,521.235,765.210">
-<text font="Arial-BoldMT" bbox="459.840,753.697,462.075,765.210" colourspace="ICCBased" ncolour="[0]" size="11.513">I</text>
-<text font="Arial-BoldMT" bbox="462.120,753.697,467.483,765.210" colourspace="ICCBased" ncolour="[0]" size="11.513">S</text>
-<text font="Arial-BoldMT" bbox="467.402,753.697,472.765,765.210" colourspace="ICCBased" ncolour="[0]" size="11.513">S</text>
-<text font="Arial-BoldMT" bbox="472.802,753.697,478.607,765.210" colourspace="ICCBased" ncolour="[0]" size="11.513">N</text>
-<text font="Arial-BoldMT" bbox="478.562,753.697,480.797,765.210" colourspace="ICCBased" ncolour="[0]" size="11.513"> </text>
-<text font="ArialMT" bbox="480.840,754.107,485.310,765.082" colourspace="ICCBased" ncolour="[0]" size="10.975">1</text>
-<text font="ArialMT" bbox="485.278,754.107,489.748,765.082" colourspace="ICCBased" ncolour="[0]" size="10.975">3</text>
-<text font="ArialMT" bbox="489.716,754.107,494.186,765.082" colourspace="ICCBased" ncolour="[0]" size="10.975">2</text>
-<text font="ArialMT" bbox="494.154,754.107,498.624,765.082" colourspace="ICCBased" ncolour="[0]" size="10.975">2</text>
-<text font="ArialMT" bbox="498.600,754.107,501.277,765.082" colourspace="ICCBased" ncolour="[0]" size="10.975">-</text>
-<text font="ArialMT" bbox="501.240,754.107,505.710,765.082" colourspace="ICCBased" ncolour="[0]" size="10.975">0</text>
-<text font="ArialMT" bbox="505.678,754.107,510.148,765.082" colourspace="ICCBased" ncolour="[0]" size="10.975">3</text>
-<text font="ArialMT" bbox="510.116,754.107,514.586,765.082" colourspace="ICCBased" ncolour="[0]" size="10.975">3</text>
-<text font="ArialMT" bbox="514.554,754.107,519.024,765.082" colourspace="ICCBased" ncolour="[0]" size="10.975">0</text>
-<text font="ArialMT" bbox="519.000,754.107,521.235,765.082" colourspace="ICCBased" ncolour="[0]" size="10.975"> </text>
-<text>
-</text>
-</textline>"""
-
-
-class TestGetTextLineFromXmlElement(unittest.TestCase):
-    def setUp(self):
-        self.text_line = get_text_line_from_xml_element(ET.fromstring(s))
-
-    def test_correct_number_of_texts(self):
-        self.assertEqual(len(self.text_line.texts), 15)
-
-    def test_text_line_bbox_is_retained(self):
-        self.assertIsInstance(self.text_line.bbox, BBox)
+from extract.coordinate import Coordinate
+from extract.text import Text
+from extract.text_line import TextLine
+from extract.text_style import TextStyle
 
 
 class TestTextLineCompactTexts(unittest.TestCase):
     def setUp(self):
-        # todo build a text_line object manually so there is no dependency on get_text_line_from_xml_element
-        self.compacted_text_line = get_text_line_from_xml_element(ET.fromstring(s))
+        text_line = TextLine(BBox(Coordinate(459.840,753.697), Coordinate(521.235,765.210)))
+        text_line.texts.append(Text(
+            BBox(Coordinate(459.840,753.697), Coordinate(462.075,765.210)),
+            'I',
+            TextStyle('Arial-BoldMT', 11.513, 'ICCBased', '[0]')
+        ))
+        text_line.texts.append(Text(
+            BBox(Coordinate(462.120,753.697), Coordinate(467.483,765.210)),
+            'S',
+            TextStyle('Arial-BoldMT', 11.513, 'ICCBased', '[0]')
+        ))
+        text_line.texts.append(Text(
+            BBox(Coordinate(467.402,753.697), Coordinate(472.765,765.210)),
+            'S',
+            TextStyle('Arial-BoldMT', 11.513, 'ICCBased', '[0]')
+        ))
+        text_line.texts.append(Text(
+            BBox(Coordinate(472.802,753.697), Coordinate(478.607,765.210)),
+            'N',
+            TextStyle('Arial-BoldMT', 11.513, 'ICCBased', '[0]')
+        ))
+        text_line.texts.append(Text(
+            BBox(Coordinate(478.562,753.697), Coordinate(480.797,765.210)),
+            ' ',
+            TextStyle('Arial-BoldMT', 11.513, 'ICCBased', '[0]')
+        ))
+        text_line.texts.append(Text(
+            BBox(Coordinate(480.840,754.107), Coordinate(485.310,765.082)),
+            '1',
+            TextStyle('ArialMT', 10.975, 'ICCBased', '[0]')
+        ))
+        text_line.texts.append(Text(
+            BBox(Coordinate(485.278,754.107), Coordinate(489.748,765.082)),
+            '3',
+            TextStyle('ArialMT', 10.975, 'ICCBased', '[0]')
+        ))
+        text_line.texts.append(Text(
+            BBox(Coordinate(489.716,754.107), Coordinate(494.186,765.082)),
+            '2',
+            TextStyle('ArialMT', 10.975, 'ICCBased', '[0]')
+        ))
+        text_line.texts.append(Text(
+            BBox(Coordinate(494.154,754.107), Coordinate(498.624,765.082)),
+            '2',
+            TextStyle('ArialMT', 10.975, 'ICCBased', '[0]')
+        ))
+        text_line.texts.append(Text(
+            BBox(Coordinate(498.600,754.107), Coordinate(501.277,765.082)),
+            '-',
+            TextStyle('ArialMT', 10.975, 'ICCBased', '[0]')
+        ))
+        text_line.texts.append(Text(
+            BBox(Coordinate(501.240,754.107), Coordinate(505.710,765.082)),
+            '0',
+            TextStyle('ArialMT', 10.975, 'ICCBased', '[0]')
+        ))
+        text_line.texts.append(Text(
+            BBox(Coordinate(505.678,754.107), Coordinate(510.148,765.082)),
+            '3',
+            TextStyle('ArialMT', 10.975, 'ICCBased', '[0]')
+        ))
+        text_line.texts.append(Text(
+            BBox(Coordinate(510.116,754.107), Coordinate(514.586,765.082)),
+            '3',
+            TextStyle('ArialMT', 10.975, 'ICCBased', '[0]')
+        ))
+        text_line.texts.append(Text(
+            BBox(Coordinate(514.554,754.107), Coordinate(519.024,765.082)),
+            '0',
+            TextStyle('ArialMT', 10.975, 'ICCBased', '[0]')
+        ))
+        text_line.texts.append(Text(
+            BBox(Coordinate(519.000,754.107), Coordinate(521.235,765.082)),
+            ' ',
+            TextStyle('ArialMT', 10.975, 'ICCBased', '[0]')
+        ))
+        self.compacted_text_line = text_line
         self.compacted_text_line.compact_texts()
 
     def test_correct_number_of_texts(self):
@@ -48,7 +95,7 @@ class TestTextLineCompactTexts(unittest.TestCase):
         {
             'node': 0,
             'font': 'Arial-BoldMT',
-            'size': '11.513',
+            'size': 11.513,
             'upper_left_coordinate_x': 459.840,
             'upper_left_coordinate_y':  753.697,
             'lower_right_coordinate_x': 480.797,
@@ -58,7 +105,7 @@ class TestTextLineCompactTexts(unittest.TestCase):
         {
             'node': 1,
             'font': 'ArialMT',
-            'size': '10.975',
+            'size': 10.975,
             'upper_left_coordinate_x': 480.840,
             'upper_left_coordinate_y':  754.107,
             'lower_right_coordinate_x': 521.235,

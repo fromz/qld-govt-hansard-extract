@@ -1,11 +1,11 @@
-from .text import Text, get_text_from_xml_element
+from extract.positioned_nodes import PositionedNodes
+from .text import Text
 from .bbox_merge import bbox_merge
-from .bbox import bbox_from_string
 from .positioned_node import PositionedNode
 import copy
 
 
-class TextLine(PositionedNode):
+class TextLine(PositionedNode, PositionedNodes):
     """A class containing information from a <textline> node"""
 
     def __init__(self, bbox):
@@ -17,10 +17,13 @@ class TextLine(PositionedNode):
         for text in self.texts:
             c += repr(text)
 
-        return "<{} bbox=\"{}\">{}</{}>".format("textline", self.dump_bbox_string(), c, "textline")
+        return "<textline {}>{}</textline>".format(super().__repr__(), c)
 
     def __iter__(self):
         return iter(self.texts)
+
+    def positioned_nodes(self):
+        return self.texts
 
     """ compacts text nodes by their style attributes, merging their bboxes """
     def compact_texts(self):
@@ -45,15 +48,3 @@ class TextLine(PositionedNode):
 
         self.texts = all_texts
 
-
-def get_text_line_from_xml_element(xml_element):
-
-    t = TextLine(bbox_from_string(xml_element.attrib['bbox']))
-
-    for text_xml_element in xml_element.findall('./text'):
-        if len(text_xml_element.attrib) == 0:
-            continue
-
-        t.texts.append(get_text_from_xml_element(text_xml_element))
-
-    return t

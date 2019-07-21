@@ -32,5 +32,4 @@ class TestPositionedNode(unittest.TestCase):
                  Coordinate(379.764, 765.312))
         )
 
-        # Min: 73.794, Max: 527.736
         self.assertTrue(positioned_node.is_center_x(73.794, 527.736, 10))
