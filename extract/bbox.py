@@ -12,15 +12,6 @@ class BBox(object):
     x1: the distance from the left of the page to the right edge of the box.
     y1: the distance from the bottom of the page to the upper edge of the box.
     """
-
-    def __repr__(self):
-        return '{},{},{},{}'.format(
-            self.upper_left_coordinate.x if not None else '',
-            self.upper_left_coordinate.y if not None else '',
-            self.lower_right_coordinate.x if not None else '',
-            self.lower_right_coordinate.y if not None else '',
-        )
-
     def __init__(self, upper_left_coordinate=None, lower_right_coordinate=None):
         """Create a BBox from two coordinate pairs.
         Returns:
@@ -32,6 +23,11 @@ class BBox(object):
         self.upper_left_coordinate = upper_left_coordinate
         self.lower_right_coordinate = lower_right_coordinate
 
+    def __repr__(self):
+        return '{},{}'.format(
+            repr(self.upper_left_coordinate) if not None else '',
+            repr(self.lower_right_coordinate) if not None else '',
+        )
 
 class InvalidBboxString(Exception):
     pass

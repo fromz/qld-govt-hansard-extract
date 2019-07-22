@@ -2,22 +2,39 @@
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style type="text/css">
-        #page {
+        .page {
             border: 1px solid black;
-            width: {{ pageNode.width }}px;
-            height: {{ pageNode.height }}px;
+            position: relative;
+            margin-bottom: 1em;
+            margin-left: 1em;
         }
         .text-node {
             border: 1px solid gray;
             position: absolute;
         }
+        body {
+            margin-top: 1em;
+        }
+        .text-node-position {
+            position: absolute;
+            left:0;
+            top:0;
+            background-color:yellow;
+            font-size: 0.5em;
+        }
     </style>
 </head>
 <body>
-    <div id="page">
-        {% for textNode in textNodes %}
-        <div class="text-node" style="font-size:{{textNode.font_size}};width:{{textNode.width}}px;height:{{textNode.height}};left:{{textNode.left}}px;top:{{textNode.top}}px;">{{ textNode.contents }}</div>
+    {% for pageNode in pageNodes %}
+    <div class="page" style="width:{{pageNode.width}}px;height:{{pageNode.height}}px;">
+        <div style="position:absolute;left:0;top:0;">{{ pageNode.bbox.upper_left_coordinate.__repr__() }} -- {{ pageNode.bbox.lower_right_coordinate.__repr__() }}</div>
+        {% for textNode in pageNode.textNodes %}
+        <div class="text-node" style="font-size:{{textNode.font_size}};width:{{textNode.width}}px;height:{{textNode.height}};left:{{textNode.left}}px;top:{{textNode.top}}px;">
+            <div class="text-node-position">{{ textNode.bbox.upper_left_coordinate.__repr__() }} -- {{ textNode.bbox.lower_right_coordinate.__repr__() }}</div>
+            {{ textNode.contents }}
+        </div>
         {% endfor %}
     </div>
+    {% endfor %}
 </body>
 </html>

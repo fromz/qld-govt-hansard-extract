@@ -1,10 +1,19 @@
 from extract.bbox import bbox_from_string
 from extract.bbox_merge import bbox_merge
+from extract.pages import Pages
 from extract.page import Page
 from extract.text import Text
 from extract.text_box import TextBox
 from extract.text_line import TextLine
 from extract.text_style import TextStyle
+
+
+def get_pages_from_xml_elements(xml_elements):
+    pages = Pages()
+    for xml_element in xml_elements:
+        pages.pages.append(get_page_from_xml_element(xml_element))
+
+    return pages
 
 
 def get_page_from_xml_element(xml_element):
