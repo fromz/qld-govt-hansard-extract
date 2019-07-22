@@ -2,7 +2,7 @@ import sys
 import argparse
 import xml.etree.ElementTree as ET
 
-from extract.xml_converter import get_page_from_xml_element
+from extract.xml_converter import get_page_from_xml_element, get_pages_from_xml_elements
 from extract.render_html import page_to_html
 
 
@@ -15,12 +15,9 @@ def main():
     parser.add_argument('--out', action='store', type=str)
     flags = parser.parse_args()
 
-    root = ET.parse(flags.path_to_xml).getroot()
-    pages = []
-    xml_page_elements = root.findall('.//page')
-    for xml_page_element in xml_page_elements:
-        page = get_page_from_xml_element(xml_page_element)
+    pages = get_pages_from_xml_elements(ET.parse(flags.path_to_xml).getroot().findall('.//page'))
 
+    for page in pages.pages:
         min_x = page.min_x_boundary()
         max_x = page.max_x_boundary()
         if flags.debug:
@@ -30,9 +27,11 @@ def main():
         for text_box in page.text_boxes:
             for text_line in text_box:
                 text_line.compact_texts()
+                unneeded_texts = []
                 for i, text in enumerate(text_line.texts):
                     if text.is_blank_node() or text.contents.strip() == '':
-                        del text_line.texts[i]
+                        unneeded_texts.append(i)
+                        continue
 
                     if int(text.space_left(min_x)) == 28:
                         text.flags.append('paragraph')
@@ -45,20 +44,15 @@ def main():
                     if text.is_above(790): # delete headers
                         del text_line.texts[i]
 
-        pages.append(page)
+                for tbi in sorted(unneeded_texts, reverse=True):
+                    del text_line.texts[tbi]
 
     # filter out blank text_boxes
-    for page in pages:
+    for page in pages.pages:
         page.text_boxes = [text_box for text_box in page.text_boxes if text_box.contains_text_nodes()]
 
-    # Need to sort texts by bbox I think. Sometimes they're out of order?
-
     # prepare for output
-    for page in pages:
-
-        f = open("out.html", "w+")
-        f.write(page_to_html(page))
-        f.close()
+    for page in pages.pages:
 
         if flags.debug:
             print(id(page), len(page.text_boxes))
@@ -72,13 +66,13 @@ def main():
             if text_box.type is not None:
                 prev_typed_text_box = text_box
 
-
             if text_box.type == None:
                 # Move all text_line nodes into it
                 unneeded_text_lines = []
                 for tli, text_line in enumerate(text_box.text_lines):
-                    prev_typed_text_box.text_lines.append(text_line)
-                    unneeded_text_lines.append(tli)
+                    if prev_typed_text_box:
+                        prev_typed_text_box.text_lines.append(text_line)
+                        unneeded_text_lines.append(tli)
 
                 for tli in sorted(unneeded_text_lines, reverse=True):
                     del page.text_boxes[i].text_lines[tli]
@@ -91,12 +85,17 @@ def main():
         for tbi in sorted(unneeded_text_boxes, reverse=True):
             del page.text_boxes[tbi]
 
-        f = open("out.xml", "w+")
-        f.write(repr(page))
-        f.close()
 
-        if flags.out == 'xml':
-            print(repr(page))
+    f = open("out.xml", "w+")
+    f.write(repr(pages))
+    f.close()
+
+    f = open("out.html", "w+")
+    f.write(page_to_html(pages))
+    f.close()
+
+    if flags.out == 'xml':
+        print(repr(pages))
 
 
 if __name__ == '__main__':
