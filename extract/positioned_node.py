@@ -14,6 +14,9 @@ class PositionedNode(object):
     def width(self):
         return round(self.bbox.lower_right_coordinate.x - self.bbox.upper_left_coordinate.x, 3)
 
+    def height(self):
+        return round(self.bbox.lower_right_coordinate.y - self.bbox.upper_left_coordinate.y, 3)
+
     def space_left(self, min_x):
         return round(self.bbox.upper_left_coordinate.x - min_x, 3)
 

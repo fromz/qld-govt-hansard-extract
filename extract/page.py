@@ -14,7 +14,7 @@ class Page(PositionedNode, PositionedNodes):
         for text_box in self.text_boxes:
             c += repr(text_box)
 
-        return "<{}>{}</{}>".format("page", c, "page")
+        return "<page {}>{}</page>".format(super().__repr__(), c)
 
     def positioned_nodes(self):
         return self.text_boxes

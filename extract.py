@@ -3,6 +3,7 @@ import argparse
 import xml.etree.ElementTree as ET
 
 from extract.xml_converter import get_page_from_xml_element
+from extract.render_html import page_to_html
 
 
 def main():
@@ -54,6 +55,11 @@ def main():
 
     # prepare for output
     for page in pages:
+
+        f = open("out.html", "w+")
+        f.write(page_to_html(page))
+        f.close()
+
         if flags.debug:
             print(id(page), len(page.text_boxes))
 
