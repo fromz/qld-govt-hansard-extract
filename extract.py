@@ -86,16 +86,18 @@ def main():
             del page.text_boxes[tbi]
 
 
+    page = pages.merge()
+
     f = open("out.xml", "w+")
-    f.write(repr(pages))
+    f.write(repr(page))
     f.close()
 
     f = open("out.html", "w+")
-    f.write(page_to_html(pages))
+    f.write(page_to_html(page))
     f.close()
 
     if flags.out == 'xml':
-        print(repr(pages))
+        print(repr(page))
 
 
 if __name__ == '__main__':

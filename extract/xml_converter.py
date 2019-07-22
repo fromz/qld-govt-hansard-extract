@@ -9,11 +9,12 @@ from extract.text_style import TextStyle
 
 
 def get_pages_from_xml_elements(xml_elements):
-    pages = Pages(bbox_from_string('0,0,0,0'))
+    pages = Pages()
     for xml_element in xml_elements:
         pages.pages.append(get_page_from_xml_element(xml_element))
 
     return pages
+
 
 def get_page_from_xml_element(xml_element):
     page = Page(bbox_from_string(xml_element.attrib['bbox']))
