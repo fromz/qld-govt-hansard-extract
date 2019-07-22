@@ -1,0 +1,23 @@
+<html>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style type="text/css">
+        #page {
+            border: 1px solid black;
+            width: {{ pageNode.width }}px;
+            height: {{ pageNode.height }}px;
+        }
+        .text-node {
+            border: 1px solid gray;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div id="page">
+        {% for textNode in textNodes %}
+        <div class="text-node" style="font-size:{{textNode.font_size}};width:{{textNode.width}}px;height:{{textNode.height}};left:{{textNode.left}}px;top:{{textNode.top}}px;">{{ textNode.contents }}</div>
+        {% endfor %}
+    </div>
+</body>
+</html>
