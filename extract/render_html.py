@@ -5,7 +5,7 @@ import jinja2
 def page_to_html(page: Page = None):
     templateLoader = jinja2.FileSystemLoader(searchpath="./extract/html")
     templateEnv = jinja2.Environment(loader=templateLoader)
-    template = templateEnv.get_template('test.html')
+    template = templateEnv.get_template('page.html')
     pageNode = {
         'width': page.bbox.lower_right_coordinate.x,
         'height': page.bbox.lower_right_coordinate.y,
